@@ -1,5 +1,5 @@
 # leaderboard
-A leaderboard display for FreeCodeCamp built using React and Bootstrap. Edit
+A leaderboard display for FreeCodeCamp built using React and Bootstrap.
 
 ## How to use the files?
 
