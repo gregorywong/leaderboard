@@ -1,7 +1,7 @@
 {
-  "name": "react-bootstrap-template",
+  "name": "leaderboard",
   "version": "1.0.0",
-  "description": "Webpack project with working React and Bootstrap configurations.",
+  "description": "A leaderboard display for FreeCodeCamp built using React and Bootstrap.",
   "main": "index.ejs",
   "scripts": {
     "dev": "webpack-dev-server",

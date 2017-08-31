@@ -1,6 +1,5 @@
-# react-bootstrap-template
-A webpack project with working React and Bootstrap configurations.
-
+# leaderboard
+A leaderboard display for FreeCodeCamp built using React and Bootstrap. Edit
 
 ## How to use the files?
 
