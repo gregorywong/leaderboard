@@ -2,14 +2,10 @@ body {
   background-color: #EEE;
 } 
 
-header {
+header, footer {
   background-color: gainsboro;
 }
 
-.input-pane {
-  font-family: Courier New, Courier, monospace;
-}
-
-.output-pane {
-  font-size: 14px;
+.small-image {
+  height: 35px;
 }
