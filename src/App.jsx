@@ -57,7 +57,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { currentSource, descending } = this.state;
+    const { currentSource, descending, users } = this.state;
     return (
       <div>
         <header className="text-center">
@@ -87,9 +87,9 @@ export default class App extends React.Component {
             </thead>
             <tbody>
               {
-                this.state.users.map((user, i) => {
+                users.map((user, i) => {
                   const { username, img, alltime, recent } = user;
-                  i = i + 1; // change 0-based index to 1-based
+                  i = descending ? i + 1 : users.length - i; // either display rank from 1 to 100 (if scores are descending) or 100 to 1
                   return (
                     <tr key={i}>
                       <td>{i}</td>
