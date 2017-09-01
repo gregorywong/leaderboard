@@ -1,6 +1,8 @@
 # leaderboard
 A leaderboard display for FreeCodeCamp built using React and Bootstrap.
 
+A working version can be found here: https://gregorywong.github.io/leaderboard/
+
 ## How to use the files?
 
 1. Clone this repo
