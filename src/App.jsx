@@ -1,7 +1,5 @@
 import React from 'react';
 
-const testUserList = [{"username":"sjames1958gm","img":"https://avatars1.githubusercontent.com/u/4639625?v=4","alltime":8068,"recent":217,"lastUpdate":"2017-08-28T16:05:18.945Z"},{"username":"Manish-Giri","img":"https://avatars1.githubusercontent.com/u/11348778?v=3","alltime":6134,"recent":145,"lastUpdate":"2017-08-28T12:00:44.321Z"},{"username":"anthonygallina1","img":"https://avatars.githubusercontent.com/u/11003055?v=3","alltime":5373,"recent":31,"lastUpdate":"2017-08-28T11:24:40.106Z"},{"username":"diomed","img":"https://avatars3.githubusercontent.com/u/72777?v=3","alltime":4961,"recent":15,"lastUpdate":"2017-08-28T10:57:07.789Z"},{"username":"Blauelf","img":"https://avatars.githubusercontent.com/u/5952026?v=3","alltime":4239,"recent":37,"lastUpdate":"2017-08-28T11:30:56.112Z"},{"username":"Chrono79","img":"https://avatars0.githubusercontent.com/u/9571508?v=3","alltime":4224,"recent":29,"lastUpdate":"2017-08-28T11:22:24.940Z"},{"username":"revisualize","img":"https://avatars.githubusercontent.com/u/1588399?v=3","alltime":4148,"recent":52,"lastUpdate":"2017-08-31T08:42:35.173Z"},{"username":"Masd925","img":"https://avatars.githubusercontent.com/u/9335367?v=3","alltime":4130,"recent":88,"lastUpdate":"2017-08-28T11:49:43.190Z"},{"username":"Takumar","img":"https://avatars3.githubusercontent.com/u/2951935?v=3","alltime":3453,"recent":4,"lastUpdate":"2017-08-28T10:09:48.772Z"},{"username":"camperbot","img":"https://avatars.githubusercontent.com/u/13561988?v=3","alltime":3378,"recent":7,"lastUpdate":"2017-08-28T10:27:20.265Z"},{"username":"moigithub","img":"https://avatars3.githubusercontent.com/u/7305974?v=3","alltime":3257,"recent":71,"lastUpdate":"2017-08-28T11:46:42.765Z"}];
-
 const ALL_TIME_URL = 'https://fcctop100.herokuapp.com/api/fccusers/top/alltime';
 const RECENT_URL = 'https://fcctop100.herokuapp.com/api/fccusers/top/recent';
 
@@ -12,13 +10,13 @@ export default class App extends React.Component {
     this.state = {
       users: [],
       descending: true,
-      activeUrl: ALL_TIME_URL,
+      currentSource: ALL_TIME_URL,
       errorMessage: ''
     }
   }
 
   componentDidMount() {
-    this.fetchUsers(this.state.activeUrl);
+    this.fetchUsers(this.state.currentSource);
   }
 
   fetchUsers = (url) => {
@@ -27,7 +25,7 @@ export default class App extends React.Component {
       .then((json) => {
         this.setState({
           users: this.state.descending ? json : json.reverse(),
-          activeUrl: url,
+          currentSource: url,
           errorMessage: ''
         })
       })
@@ -39,17 +37,17 @@ export default class App extends React.Component {
       });
   }
 
-  categoryClicked = (url) => {
+  categoryClicked = (newSource) => {
     return (e) => {
       e.preventDefault();
-      if (this.state.activeUrl !== url) {
+      if (this.state.currentSource !== newSource) {
         this.setState({
           users: []
         })
-        this.fetchUsers(url);
+        this.fetchUsers(newSource);
       }
       else {
-        const {users, descending} = this.state;
+        const { users, descending } = this.state;
         this.setState({
           users: users.reverse(),
           descending: !descending
@@ -59,7 +57,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { activeUrl, descending } = this.state;
+    const { currentSource, descending } = this.state;
     return (
       <div>
         <header className="text-center">
@@ -77,12 +75,12 @@ export default class App extends React.Component {
                 <th style={{ width: '45%' }}>Username</th>
                 <th style={{ width: '25%' }}>
                   <a href="" onClick={this.categoryClicked(RECENT_URL)}>
-                    Points (past 30 days){activeUrl === RECENT_URL && ((descending && '▼') || (!descending && '▲'))}
+                    Points (past 30 days){currentSource === RECENT_URL && ((descending && '▼') || (!descending && '▲'))}
                   </a>
                 </th>
                 <th style={{ width: '25%' }}>
                   <a href="" onClick={this.categoryClicked(ALL_TIME_URL)}>
-                    Points (all time){activeUrl === ALL_TIME_URL && ((descending && '▼') || (!descending && '▲'))}
+                    Points (all time){currentSource === ALL_TIME_URL && ((descending && '▼') || (!descending && '▲'))}
                   </a>
                 </th>
               </tr>
