@@ -11,6 +11,7 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       users: [],
+      descending: true,
       activeUrl: ALL_TIME_URL,
       errorMessage: ''
     }
@@ -25,7 +26,7 @@ export default class App extends React.Component {
       .then((response) => response.json())
       .then((json) => {
         this.setState({
-          users: json,
+          users: this.state.descending ? json : json.reverse(),
           activeUrl: url,
           errorMessage: ''
         })
@@ -42,13 +43,23 @@ export default class App extends React.Component {
     return (e) => {
       e.preventDefault();
       if (this.state.activeUrl !== url) {
+        this.setState({
+          users: []
+        })
         this.fetchUsers(url);
+      }
+      else {
+        const {users, descending} = this.state;
+        this.setState({
+          users: users.reverse(),
+          descending: !descending
+        })
       }
     }
   }
 
   render() {
-    const { activeUrl } = this.state;
+    const { activeUrl, descending } = this.state;
     return (
       <div>
         <header className="text-center">
@@ -66,12 +77,12 @@ export default class App extends React.Component {
                 <th style={{ width: '45%' }}>Username</th>
                 <th style={{ width: '25%' }}>
                   <a href="" onClick={this.categoryClicked(RECENT_URL)}>
-                    Points (past 30 days){activeUrl === RECENT_URL && '▼'}
+                    Points (past 30 days){activeUrl === RECENT_URL && ((descending && '▼') || (!descending && '▲'))}
                   </a>
                 </th>
                 <th style={{ width: '25%' }}>
                   <a href="" onClick={this.categoryClicked(ALL_TIME_URL)}>
-                    Points (all time){activeUrl === ALL_TIME_URL && '▼'}
+                    Points (all time){activeUrl === ALL_TIME_URL && ((descending && '▼') || (!descending && '▲'))}
                   </a>
                 </th>
               </tr>
