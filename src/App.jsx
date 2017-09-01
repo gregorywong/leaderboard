@@ -2,21 +2,53 @@ import React from 'react';
 
 const testUserList = [{"username":"sjames1958gm","img":"https://avatars1.githubusercontent.com/u/4639625?v=4","alltime":8068,"recent":217,"lastUpdate":"2017-08-28T16:05:18.945Z"},{"username":"Manish-Giri","img":"https://avatars1.githubusercontent.com/u/11348778?v=3","alltime":6134,"recent":145,"lastUpdate":"2017-08-28T12:00:44.321Z"},{"username":"anthonygallina1","img":"https://avatars.githubusercontent.com/u/11003055?v=3","alltime":5373,"recent":31,"lastUpdate":"2017-08-28T11:24:40.106Z"},{"username":"diomed","img":"https://avatars3.githubusercontent.com/u/72777?v=3","alltime":4961,"recent":15,"lastUpdate":"2017-08-28T10:57:07.789Z"},{"username":"Blauelf","img":"https://avatars.githubusercontent.com/u/5952026?v=3","alltime":4239,"recent":37,"lastUpdate":"2017-08-28T11:30:56.112Z"},{"username":"Chrono79","img":"https://avatars0.githubusercontent.com/u/9571508?v=3","alltime":4224,"recent":29,"lastUpdate":"2017-08-28T11:22:24.940Z"},{"username":"revisualize","img":"https://avatars.githubusercontent.com/u/1588399?v=3","alltime":4148,"recent":52,"lastUpdate":"2017-08-31T08:42:35.173Z"},{"username":"Masd925","img":"https://avatars.githubusercontent.com/u/9335367?v=3","alltime":4130,"recent":88,"lastUpdate":"2017-08-28T11:49:43.190Z"},{"username":"Takumar","img":"https://avatars3.githubusercontent.com/u/2951935?v=3","alltime":3453,"recent":4,"lastUpdate":"2017-08-28T10:09:48.772Z"},{"username":"camperbot","img":"https://avatars.githubusercontent.com/u/13561988?v=3","alltime":3378,"recent":7,"lastUpdate":"2017-08-28T10:27:20.265Z"},{"username":"moigithub","img":"https://avatars3.githubusercontent.com/u/7305974?v=3","alltime":3257,"recent":71,"lastUpdate":"2017-08-28T11:46:42.765Z"}];
 
+const ALL_TIME_URL = 'https://fcctop100.herokuapp.com/api/fccusers/top/alltime';
+const RECENT_URL = 'https://fcctop100.herokuapp.com/api/fccusers/top/recent';
+
 export default class App extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      // users: []
-      users: testUserList
+      users: [],
+      activeUrl: ALL_TIME_URL,
+      errorMessage: ''
     }
   }
 
   componentDidMount() {
-    // todo: fetch data from API
+    this.fetchUsers(this.state.activeUrl);
+  }
+
+  fetchUsers = (url) => {
+    fetch(url)
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({
+          users: json,
+          activeUrl: url,
+          errorMessage: ''
+        })
+      })
+      .catch((error) => {
+        console.error(error);
+        this.setState({
+          errorMessage: 'Something went wrong. Try refreshing the page!'
+        })
+      });
+  }
+
+  categoryClicked = (url) => {
+    return (e) => {
+      e.preventDefault();
+      if (this.state.activeUrl !== url) {
+        this.fetchUsers(url);
+      }
+    }
   }
 
   render() {
+    const { activeUrl } = this.state;
     return (
       <div>
         <header className="text-center">
@@ -26,13 +58,22 @@ export default class App extends React.Component {
           </div>
         </header>
         <div className="container">
+          <h2 className='text-center text-danger'>{this.state.errorMessage}</h2>
           <table className='table table-striped px-5'>
             <thead className='thead-inverse'>
               <tr>
                 <th style={{ width: '5%' }}>#</th>
                 <th style={{ width: '45%' }}>Username</th>
-                <th style={{ width: '25%' }}>Points (past 30 days)</th>
-                <th style={{ width: '25%' }}>Points (all time)</th>
+                <th style={{ width: '25%' }}>
+                  <a href="" onClick={this.categoryClicked(RECENT_URL)}>
+                    Points (past 30 days){activeUrl === RECENT_URL && '▼'}
+                  </a>
+                </th>
+                <th style={{ width: '25%' }}>
+                  <a href="" onClick={this.categoryClicked(ALL_TIME_URL)}>
+                    Points (all time){activeUrl === ALL_TIME_URL && '▼'}
+                  </a>
+                </th>
               </tr>
             </thead>
             <tbody>
